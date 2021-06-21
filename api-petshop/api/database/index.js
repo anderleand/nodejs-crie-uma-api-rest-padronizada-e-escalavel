@@ -1,0 +1,27 @@
+const Sequelize = require('sequelize');
+// const config = require('config');
+
+const instancia = new Sequelize(
+
+  'petshop',
+  'root',
+  'admin',
+  {
+    host: '127.0.0.1',
+    dialect: 'mysql',
+  },
+
+);
+
+// Desabilitado pois o config estava dando problema
+// const instancia = new Sequelize(
+//     config.get('mysql.database'),
+//     config.get('mysql.user'),
+//     config.get('mysql.password'),
+//     {
+//         host: config.get('mysql.host'),
+//         dialect: 'mysql'
+//     }
+// );
+
+module.exports = instancia;
