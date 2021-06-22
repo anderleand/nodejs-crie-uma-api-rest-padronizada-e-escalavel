@@ -14,6 +14,7 @@ class Fornecedor {
   }
 
   async criar() {
+    this.validar();
     const result = await TabelaFornecedor.inserir({
       empresa: this.empresa,
       email: this.email,
@@ -29,6 +30,10 @@ class Fornecedor {
 
   async carregar() {
     const encontrado = await TabelaFornecedor.pegarPorId(this.id);
+
+    if (!encontrado || null || undefined) {
+      throw new Error(`Fornecedor id:${this.id} não encontrado`);
+    }
     this.empresa = encontrado.empresa;
     this.email = encontrado.email;
     this.categoria = encontrado.categoria;
@@ -49,11 +54,25 @@ class Fornecedor {
       }
     });
 
-    if (Object.keys(dadosParaAtualizar).length == 0) {
+    if (Object.keys(dadosParaAtualizar).length === 0) {
       throw new Error('Não foram fornecidos dados para atualizar');
     }
 
     await TabelaFornecedor.atualizar(this.id, dadosParaAtualizar);
+  }
+
+  async delete() {
+    await TabelaFornecedor.delete(this.id);
+  }
+
+  validar() {
+    const campos = ['empresa', 'email', 'categoria'];
+    campos.forEach((campo) => {
+      const valor = this[campo];
+      if (typeof valor !== 'string' || valor.length === 0) {
+        throw new Error(`O Campo '${campo}' está inválido.`);
+      }
+    });
   }
 }
 
