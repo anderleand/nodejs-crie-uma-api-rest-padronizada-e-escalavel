@@ -2,13 +2,15 @@ const roteador = require('express').Router();
 const TabelaFornecedor = require('./TabelaFornecedor');
 const Fornecedor = require('./Fornecedor');
 
+// Listar todos
 roteador.get('/', async (req, res) => {
   const result = await TabelaFornecedor.listar();
   res.status(200);
   res.send(JSON.stringify(result));
 });
 
-roteador.post('/', async (req, res) => {
+// Criar
+roteador.post('/', async (req, res, next) => {
   try {
     const dadosRecebidos = req.body;
     const fornecedor = new Fornecedor(dadosRecebidos);
@@ -16,14 +18,12 @@ roteador.post('/', async (req, res) => {
     res.status(201);
     res.send(JSON.stringify(fornecedor));
   } catch (erro) {
-    res.status(400);
-    res.send(JSON.stringify({
-      mensagem: erro.message,
-    }));
+    next(erro);
   }
 });
 
-roteador.get('/:id', async (req, res) => {
+// Listar por id
+roteador.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const fornecedor = new Fornecedor({ id });
@@ -31,14 +31,12 @@ roteador.get('/:id', async (req, res) => {
     res.status(200);
     res.send(JSON.stringify(fornecedor));
   } catch (erro) {
-    res.status(404);
-    res.send(JSON.stringify({
-      mensagem: erro.message,
-    }));
+    next(erro);
   }
 });
 
-roteador.put('/:id', async (req, res) => {
+// Atualizar
+roteador.put('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const dadosRecebidos = req.body;
@@ -50,14 +48,12 @@ roteador.put('/:id', async (req, res) => {
       mensagem: 'Atualizado com sucesso.',
     }));
   } catch (erro) {
-    res.status(400);
-    res.send(JSON.stringify({
-      mensagem: erro.message,
-    }));
+    next(erro);
   }
 });
 
-roteador.delete('/:id', async (req, res) => {
+// Deletar
+roteador.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const fornecedor = new Fornecedor({ id });
@@ -68,10 +64,7 @@ roteador.delete('/:id', async (req, res) => {
       mensagem: `Id ${id} removido com sucesso.`,
     }));
   } catch (erro) {
-    res.status(404);
-    res.send(JSON.stringify({
-      mensagem: erro.message,
-    }));
+    next(erro);
   }
 });
 

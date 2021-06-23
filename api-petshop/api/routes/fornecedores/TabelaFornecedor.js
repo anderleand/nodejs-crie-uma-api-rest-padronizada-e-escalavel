@@ -1,4 +1,5 @@
 const Modelo = require('./ModeloTabelaFornecedor');
+// const NaoEncontrado = require('../../erros/NaoEncontrado');
 
 module.exports = {
   listar() {
@@ -13,7 +14,10 @@ module.exports = {
     const encontrado = Modelo.findOne({
       where: { id },
     });
-
+    // console.log(`Isso é um log ${encontrado.json()}`);
+    // if (!encontrado || null || undefined) {
+    //   throw new NaoEncontrado();
+    // }
     return encontrado;
   },
 
