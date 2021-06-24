@@ -10,7 +10,7 @@ roteador.get('/', async (req, res) => {
   const serializador = new SerializadorFornecedor(
     res.getHeader('Content-Type'),
   );
-  res.send(JSON.stringify(serializador.serializar(result)));
+  res.send(serializador.serializar(result));
 });
 
 // Criar
@@ -23,7 +23,7 @@ roteador.post('/', async (req, res, next) => {
     const serializador = new SerializadorFornecedor(
       res.getHeader('Content-Type'),
     );
-    res.send(JSON.stringify(fornecedor));
+    res.send(serializador.serializar(fornecedor));
   } catch (erro) {
     next(erro);
   }
@@ -37,7 +37,7 @@ roteador.get('/:id', async (req, res, next) => {
     await fornecedor.carregar();
     res.status(200);
     const serializador = new SerializadorFornecedor(
-      res.getHeader('Content-Type'),
+      res.getHeader('Content-Type'), ['email', 'dataCriacao', 'dataAtualizacao', 'versao'],
     );
     res.send(serializador.serializar(fornecedor));
   } catch (erro) {
